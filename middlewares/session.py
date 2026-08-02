@@ -3,6 +3,8 @@ from typing import Any, Callable, Dict
 from collections.abc import Awaitable
 from aiogram.types import Message
 
+from repositories.user import UserRepo
+
 class DatabaseSessionMiddleware(BaseMiddleware):
     def __init__(self, session_maker) -> None:
         self.session_maker = session_maker
@@ -14,5 +16,5 @@ class DatabaseSessionMiddleware(BaseMiddleware):
         data: Dict[str, any]
     ) -> Any:
         async with self.session_maker() as session:
-            data["session"] = session
+            data["user_repo"] = UserRepo(session=session)
             return await handler(event, data)

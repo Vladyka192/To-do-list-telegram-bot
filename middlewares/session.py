@@ -4,6 +4,7 @@ from collections.abc import Awaitable
 from aiogram.types import Message
 
 from repositories.user import UserRepo
+from repositories.task import TaskRepo
 
 class DatabaseSessionMiddleware(BaseMiddleware):
     def __init__(self, session_maker) -> None:
@@ -17,4 +18,5 @@ class DatabaseSessionMiddleware(BaseMiddleware):
     ) -> Any:
         async with self.session_maker() as session:
             data["user_repo"] = UserRepo(session=session)
+            data["task_repo"] = TaskRepo(session=session)
             return await handler(event, data)

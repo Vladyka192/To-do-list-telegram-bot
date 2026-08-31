@@ -9,6 +9,9 @@ from repositories.task import TaskRepo
 
 from datetime import datetime
 
+from keyboards.choice import choice_menu_kb
+from keyboards.menu import main_menu_kb
+
 class EditTask(StatesGroup):
     edit_message = State()
     change_value = State()
@@ -49,7 +52,7 @@ async def edit_task(message: Message, command: CommandObject, user_repo: UserRep
     await state.update_data(user_id = user.id)
 
     await message.answer(f"Вы выбрали:\nНазвание: {task.title}")
-    await message.answer(f"Что вы хотите в ней изменить?")
+    await message.answer(f"Что вы хотите в ней изменить?", reply_markup=choice_menu_kb())
     await state.set_state(EditTask.edit_message)
 
 @router.message(StateFilter(EditTask.edit_message))
@@ -63,13 +66,13 @@ async def get_task_message(message: Message, state: FSMContext):
     elif(message.text == "Приоритет"):
         await message.answer("Какой новый приоритет вы хотите поставить?")
         await state.update_data(edit_field="priority")
-    elif(message.text == "Дату"):
+    elif(message.text == "Дата"):
         await message.answer("Какую новую дату вы хотите поставить?")
         await state.update_data(edit_field="due_date")
     elif(message.text == "Время"):
         await message.answer("Какое новое время вы хотите поставить?")
         await state.update_data(edit_field="due_time")
-    elif(message.text == "Состояние"):
+    elif(message.text == "Статус"):
         await message.answer("Какой новое состояние вы хотите поставить?")
         await state.update_data(edit_field="status")
     else:
@@ -82,31 +85,30 @@ async def get_task_message(message: Message, state: FSMContext):
 async def edit_task_value(message: Message, state: FSMContext, task_repo: TaskRepo):
     data = await state.get_data()
     field = data["edit_field"]
-    if(field == "title" and field == "description"):
-        text_information = message.text
+    if(field == "title" or field == "description" or field == "status"):    # status убрать
+        value = message.text
     elif(field == "priority"):
         try:
-            text_information = int(message.text)
-            if(text_information < 4 and text_information > 0):
-                pass
-            else:
+            value = int(message.text)
+            if value not in (1, 2, 3):
                 await message.answer("Введите число 1, 2, 3")
                 return
         except ValueError:
             await message.answer("Введите число 1, 2, 3")
             return
-    elif(field == "due_data"):
+    elif(field == "due_date"):
         try:
-            text_information = datetime.strptime(message.text, "%H:%M").date()
+            value = datetime.strptime(message.text, "%d.%m.%Y").date()
         except ValueError:
-            await message.answer("Введите время в формате ЧЧ:ММ\nНапример: 16:50")
+            await message.answer("Введите дату в формате ДД.ММ.ГГГГ\nНапример: 15.08.2026")
             return
     elif(field == "due_time"):
         try:
-            text_information = datetime.strptime(message.text, "%H:%M").time()
+            value = datetime.strptime(message.text, "%H:%M").time()
         except ValueError:
             await message.answer("Введите время в формате ЧЧ:ММ\nНапример: 16:50")
             return
 
-    await task_repo.update_task(data["task_id"], data["user_id"], data["edit_field"], text_information)
-    await message.answer("Данные успешно обновлены!")
+    await task_repo.update_task(data["task_id"], data["user_id"], data["edit_field"], value)
+    await message.answer("Данные успешно обновлены!", reply_markup=main_menu_kb())
+    await state.clear()

@@ -51,7 +51,9 @@ async def edit_task(message: Message, command: CommandObject, user_repo: UserRep
     await state.update_data(task_id = task.id)
     await state.update_data(user_id = user.id)
 
-    await message.answer(f"Вы выбрали:\nНазвание: {task.title}")
+    await message.answer(f"Вы выбрали:\nНазвание: {task.title}\nСтатус: {task.status}\n"
+                         f"Описание: {task.description}\nПриоритет: {task.priority}\n"
+                         f"Дедлайн задачи: {task.due_date:%d %B} {task.due_time}\n")
     await message.answer(f"Что вы хотите в ней изменить?", reply_markup=choice_menu_kb())
     await state.set_state(EditTask.edit_message)
 
@@ -60,6 +62,9 @@ async def get_task_message(message: Message, state: FSMContext):
     if(message.text == "Название"):
         await message.answer("Какое новое название вы хотите поставить?")
         await state.update_data(edit_field="title")
+    elif(message.text == "Статус"):
+        await message.answer("Какой новое состояние вы хотите поставить?")
+        await state.update_data(edit_field="status")
     elif(message.text == "Описание"):
         await message.answer("Какое новое описание вы хотите поставить?")
         await state.update_data(edit_field="description")
@@ -72,9 +77,10 @@ async def get_task_message(message: Message, state: FSMContext):
     elif(message.text == "Время"):
         await message.answer("Какое новое время вы хотите поставить?")
         await state.update_data(edit_field="due_time")
-    elif(message.text == "Статус"):
-        await message.answer("Какой новое состояние вы хотите поставить?")
-        await state.update_data(edit_field="status")
+    elif(message.text == "Назад"):
+        await state.clear()
+        await message.answer("Редактирование отменено", reply_markup=main_menu_kb())
+        return
     else:
         await message.answer("Неизвестный аргумент. Напишите, что именно: Название, Описание, Приоритет, Дату, Время, Состояние.")
         return
@@ -108,6 +114,8 @@ async def edit_task_value(message: Message, state: FSMContext, task_repo: TaskRe
         except ValueError:
             await message.answer("Введите время в формате ЧЧ:ММ\nНапример: 16:50")
             return
+    else:
+        return
 
     await task_repo.update_task(data["task_id"], data["user_id"], data["edit_field"], value)
     await message.answer("Данные успешно обновлены!", reply_markup=main_menu_kb())

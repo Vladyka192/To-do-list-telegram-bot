@@ -19,8 +19,8 @@ class TaskRepo:
         self.__session.add(task)
         await self.__session.commit()
 
-    async def delete_task(self, id: int, user_id: int):
-        statement = select(Task).where(Task.id == id, Task.user_id == user_id)
+    async def delete_task(self, task_id: int, user_id: int):
+        statement = select(Task).where(Task.id == task_id, Task.user_id == user_id)
         task = await self.__session.scalar(statement)
 
         if not task:
@@ -29,8 +29,8 @@ class TaskRepo:
         await self.__session.delete(task)
         await self.__session.commit()
 
-    async def update_task(self, id: int, user_id: int, field: str, value):
-        statement = select(Task).where(Task.id == id, Task.user_id == user_id)
+    async def update_task(self, task_id: int, user_id: int, field: str, value):
+        statement = select(Task).where(Task.id == task_id, Task.user_id == user_id)
         task = await self.__session.scalar(statement)
 
         if not task:

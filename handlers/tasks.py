@@ -37,5 +37,5 @@ async def get_tasks(message: Message, user_repo: UserRepo, task_repo: TaskRepo):
             task_priority = priority_names[task.priority]
             task_status = status_names[task.status]
 
-            result += f"{count}) {task.title}\nСтатус: {task_status}\nОписание: {task.description}\nПриоритет: {task_priority}\nДедлайн задачи: {task.due_date:%d %B} {task.due_time}\n "
+            result += f"{count}) {task.title} {task_status}"
         await message.answer(result)

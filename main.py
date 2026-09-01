@@ -1,12 +1,15 @@
+import os
 import asyncio
 from aiogram import Bot, Dispatcher
+from dotenv import load_dotenv
 
 from middlewares import register_middlewares
 from handlers import register_routes
 from database.models import BaseModel
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-TOKEN = "8968451956:AAFdo-SP_mE9ajS1UX5lqypWk5UmhFSrkF8"
 
+load_dotenv()
+TOKEN = os.getenv("BOT_TOKEN")
 
 async def init_model(engine):
     async with engine.begin() as conn:
@@ -17,7 +20,7 @@ async def main():
     dp = Dispatcher()
 
     engine = create_async_engine(
-        url="sqlite+aiosqlite:///notes.db"
+        url=os.getenv("PG_LINK")
     )
     session_maker = async_sessionmaker(engine, expire_on_commit=False)
 

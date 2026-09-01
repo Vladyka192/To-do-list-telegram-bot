@@ -17,6 +17,8 @@ def choice_menu_kb():
 def edit_task_kb(task_id: int):
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Редактировать", callback_data=f"edit_task:{task_id}"), 
+            [InlineKeyboardButton(text="Выполнить", callback_data=f"complete_task:{task_id}"), 
+            InlineKeyboardButton(text="Изменить", callback_data=f"edit_task:{task_id}")]
+            [InlineKeyboardButton(text="Перенести", callback_data=f"change_time:{task_id}"), 
             InlineKeyboardButton(text="Удалить", callback_data=f"delete_task:{task_id}")]
         ])

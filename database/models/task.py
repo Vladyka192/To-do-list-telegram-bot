@@ -17,4 +17,5 @@ class Task(BaseModel):
     due_time: Mapped[time]
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.now, onupdate=datetime.now)
+    tasks: Mapped[list["Reminder"]] = relationship("Reminder", back_populates="tasks")
     user: Mapped["User"] = relationship("User", back_populates="tasks")

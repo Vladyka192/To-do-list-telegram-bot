@@ -1,6 +1,5 @@
 from datetime import datetime
 from database.models import BaseModel
-# from database.models.task import Task
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import BigInteger, DateTime
 

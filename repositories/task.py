@@ -1,4 +1,4 @@
-from datetime import date, time, datetime
+from datetime import date, time
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

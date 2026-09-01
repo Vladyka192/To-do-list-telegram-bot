@@ -42,20 +42,20 @@ async def get_task(message: Message, user_repo: UserRepo, task_repo: TaskRepo, c
         return
     priority_names = {
             1: "Низкий",
-            2: "Важный",
-            3: "Срочный"
+            2: "Средний",
+            3: "Высокий"
         }
-    status_names = {
-            "active": "Активная",
-            "completed": "Выполненная",
-            "cancelled": "Отмененная"
-        }
+    # status_names = {
+    #         "active": "Активная",
+    #         "completed": "Выполненная",
+    #         "cancelled": "Отмененная"
+    #     }
     
     task_priority = priority_names[task.priority]
-    task_status = status_names[task.status]
-    await message.answer(f"{task_number}) {task.title}\nСтатус: {task_status}\n"
-                         f"Описание: {task.description}\nПриоритет: {task_priority}\n"
-                         f"Дедлайн задачи: {task.due_date:%d %B} {task.due_time}\n", reply_markup=edit_task_kb(task.id))
+    # task_status = status_names[task.status]
+    await message.answer(f"{task.title}\n"
+                         f"{task.due_date:%d %B}\n"
+                         f"{task_priority} приоритет\n", reply_markup=edit_task_kb(task.id))
 
 @router.callback_query(F.data.startswith("delete_task:"))
 async def delete_task(callback: CallbackQuery, user_repo: UserRepo, task_repo: TaskRepo):

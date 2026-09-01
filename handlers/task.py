@@ -40,9 +40,21 @@ async def get_task(message: Message, user_repo: UserRepo, task_repo: TaskRepo, c
     except IndexError:
         await message.answer("Ошибка: задач меньше, чем в аргументе. Введите правильный id задачи")
         return
-
-    await message.answer(f"{task_number}) {task.title}\nСтатус: {task.status}\n"
-                         f"Описание: {task.description}\nПриоритет: {task.priority}\n"
+    priority_names = {
+            1: "Низкий",
+            2: "Важный",
+            3: "Срочный"
+        }
+    status_names = {
+            "active": "Активная",
+            "completed": "Выполненная",
+            "cancelled": "Отмененная"
+        }
+    
+    task_priority = priority_names[task.priority]
+    task_status = status_names[task.status]
+    await message.answer(f"{task_number}) {task.title}\nСтатус: {task_status}\n"
+                         f"Описание: {task.description}\nПриоритет: {task_priority}\n"
                          f"Дедлайн задачи: {task.due_date:%d %B} {task.due_time}\n", reply_markup=edit_task_kb(task.id))
 
 @router.callback_query(F.data.startswith("delete_task:"))

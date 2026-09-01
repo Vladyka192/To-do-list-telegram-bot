@@ -30,5 +30,5 @@ async def get_tasks(message: Message, user_repo: UserRepo, task_repo: TaskRepo):
         result = ""
         for count, task in enumerate(tasks, start=1):
             task_status = status_names[task.status]
-            result += f"{count}) {task.title} {task_status}"
+            result += f"{count}) {task.title} - {task_status}\n"
         await message.answer(result)

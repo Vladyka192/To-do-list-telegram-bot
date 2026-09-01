@@ -14,6 +14,11 @@ class TaskRepo:
         tasks = await self.__session.scalars(statement)
         return tasks.all()
 
+    async def get_tasks_for_date(self, user_id: int, task_date: date):
+        statement = select(Task).where(Task.user_id == user_id, Task.due_date == task_date)
+        tasks = await self.__session.scalars(statement)
+        return tasks.all()
+    
     async def create_task(self, user_id: int, title: str, description: str | None , status: str, priority: int, due_date: date, due_time: time):
         task = Task(user_id=user_id, title=title, description=description, status=status, priority=priority, due_date=due_date, due_time=due_time)
         self.__session.add(task)

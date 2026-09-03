@@ -5,6 +5,7 @@ from aiogram.types import Message
 
 from repositories.user import UserRepo
 from repositories.task import TaskRepo
+from repositories.reminder import RemindRepo
 
 class DatabaseSessionMiddleware(BaseMiddleware):
     def __init__(self, session_maker) -> None:
@@ -19,4 +20,5 @@ class DatabaseSessionMiddleware(BaseMiddleware):
         async with self.session_maker() as session:
             data["user_repo"] = UserRepo(session=session)
             data["task_repo"] = TaskRepo(session=session)
+            data["remind_repo"] = RemindRepo(session=session)
             return await handler(event, data)

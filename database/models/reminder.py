@@ -6,10 +6,11 @@ from sqlalchemy import ForeignKey
 
 class Reminder(BaseModel):
     __tablename__ = "remiders"
+
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id"))
-    remind_at: Mapped[datetime | None] = mapped_column(datetime, nullable=True)
-    is_sent: Mapped[bool]
+    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"))
+    remind_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    is_sent: Mapped[bool] = mapped_column(default=False)
     sent_at: Mapped[datetime] = mapped_column(default=datetime.now, onupdate=datetime.now)
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
-    tasks: Mapped["Task"] = relationship("Task", back_populates="reminders")
+    task: Mapped["Task"] = relationship("Task", back_populates="reminders")

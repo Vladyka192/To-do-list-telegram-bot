@@ -14,10 +14,12 @@ async def get_reminders(message: Message, user_repo: UserRepo, task_repo: TaskRe
     if not user:
         await message.answer("Сначала выполните /start")
         return
-    reminds = await remind_repo.get_users_reminders(user.id)
+    reminds = await remind_repo.get_user_reminders(user.id)
     result = ""
+    count = 1
     for reminder, task in reminds:
-        result += f"Задача: {task.title} напомнить в {reminder.remind_at}\n"
+        result += f"{count})Задача: {task.title} напомнить в {reminder.remind_at}\n"
+        count += 1
 
     if not result:
         await message.answer("У вас нет напоминаний")

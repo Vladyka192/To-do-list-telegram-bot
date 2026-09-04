@@ -10,8 +10,9 @@ from handlers.tomorrow import router as tomorrow_tasks
 from handlers.add_task import router as create_task
 from handlers.delete import router as delete_task
 from handlers.edit import router as edit_task
-from handlers.create_remind import router as remind_task
+from handlers.create_remind import router as create_reminder
 from handlers.reminders import router as reminders
+from handlers.delete_reminder import router as delete_reminder
 from handlers.check_tasks import router as check_task
 
 def register_routes(dp: Dispatcher):
@@ -25,6 +26,7 @@ def register_routes(dp: Dispatcher):
     dp.include_router(create_task)
     dp.include_router(delete_task)
     dp.include_router(edit_task)
-    dp.include_router(remind_task)
+    dp.include_router(create_reminder)
     dp.include_router(reminders)
+    dp.include_router(delete_reminder)
     dp.include_router(check_task)

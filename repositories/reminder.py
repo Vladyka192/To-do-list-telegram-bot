@@ -37,7 +37,7 @@ class RemindRepo:
         setattr(remind, "is_sent", True)
         await self.__session.commit()
 
-    async def get_users_reminders(self, user_id: int):
+    async def get_user_reminders(self, user_id: int):
         statement = (select(Reminder, Task)
                      .join(Task, Reminder.task_id == Task.id)
                      .where(Task.user_id == user_id, Reminder.is_sent == False)
@@ -45,8 +45,16 @@ class RemindRepo:
         result = await self.__session.execute(statement)
         return result.all()
 
-    async def delete_reminder(self, user_id: int):
-        statement = (select(Reminder, Task)
+    async def delete_reminder(self, reminder_id: int, user_id: int):
+        statement = (select(Reminder)
                 .join(Task, Reminder.task_id == Task.id)
-                .where(Task.user_id == user_id, Reminder.is_sent == False)
+                .where(Task.user_id == user_id, Reminder.id == reminder_id, Reminder.is_sent == False)
                 .order_by(Reminder.remind_at))
+
+        result = await self.__session.scalar(statement)
+
+        if not result:
+            return
+
+        await self.__session.delete(result)
+        await self.__session.commit()

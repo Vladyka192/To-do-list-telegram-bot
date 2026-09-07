@@ -19,6 +19,5 @@ def edit_task_kb(task_id: int):
         inline_keyboard=[
             [InlineKeyboardButton(text="Выполнить", callback_data=f"complete_task:{task_id}"), 
             InlineKeyboardButton(text="Изменить", callback_data=f"edit_task:{task_id}")],
-            [InlineKeyboardButton(text="Перенести", callback_data=f"change_time:{task_id}"), 
-            InlineKeyboardButton(text="Удалить", callback_data=f"delete_task:{task_id}")]
+            [InlineKeyboardButton(text="Удалить", callback_data=f"delete_task:{task_id}")]
         ])

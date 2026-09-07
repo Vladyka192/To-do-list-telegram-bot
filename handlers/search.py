@@ -19,4 +19,4 @@ async def remind_task(message: Message, command: CommandObject, task_repo: TaskR
 
     results = await task_repo.search_task(user.id, command.args)
     for result in results:
-        await message.answer(f"{result}\n")
+        await message.answer(f"{result.id}) {result.title}\n")

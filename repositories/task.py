@@ -44,6 +44,21 @@ class TaskRepo:
         setattr(task, field, value)
         await self.__session.commit()
 
+    async def complete_task(self, task_id: int, user_id: int):
+        statement = select(Task).where(Task.id == task_id, Task.user_id == user_id)
+        task = await self.__session.scalar(statement)
+
+        if not task:
+            return
+
+        setattr(task, "status", "completed")
+        await self.__session.commit()
+
+    async def get_user_task_history(self, user_id: int):
+        statement = select(Task).where(Task.user_id == user_id, Task.status == "completed")
+        tasks = await self.__session.scalars(statement)
+        return tasks.all()
+
     async def search_task(self, user_id: int, query: str):
         statement = select(Task).where(Task.user_id == user_id, or_(Task.title.ilike(f"%query%"), Task.description.ilike(f"%query%")).order_by(Task.created_at.desc()))
 

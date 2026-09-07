@@ -11,7 +11,7 @@ from repositories.task import TaskRepo
 from repositories.reminder import RemindRepo
 
 class CreateRecurrence_rule(StatesGroup):
-    task_name = State()
+    recurrence_rule = State()
 
 router = Router()
 
@@ -20,7 +20,7 @@ async def remind_task(message: Message, command: CommandObject, task_repo: TaskR
     user = await user_repo.get_user_by_tg_id(message.from_user.id)
 
     if command.args is None:
-        await message.answer("Ошибка: не переданы аргументы")
+        await message.answer("Ошибка: не переданы аргументы.")
         return
     tasks = await task_repo.get_user_tasks(user.id)
     
@@ -46,11 +46,11 @@ async def remind_task(message: Message, command: CommandObject, task_repo: TaskR
         return
     
     await state.update_data(task_id=task.id)
-    await message.answer("Сколько раз она должна повторяться? (каждый день)")
+    await message.answer("Сколько раз задача должна повторяться? Например: Каждые 2 недели")
     await state.set_state(CreateRecurrence_rule.recurrence_rule)
 
-@router.message(StateFilter(CreateReminder.remind_time))
-async def take_remind_time(message: Message, state: FSMContext, remind_repo: RemindRepo):
+@router.message(StateFilter(CreateRecurrence_rule.recurrence_rule))
+async def take_recurrence_rule(message: Message, state: FSMContext, remind_repo: RemindRepo):
     try:
         remind_time = datetime.strptime(message.text, "%d.%m.%Y %H:%M")
     except ValueError:

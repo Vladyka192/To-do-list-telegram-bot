@@ -57,14 +57,13 @@ async def get_task(message: Message, user_repo: UserRepo, task_repo: TaskRepo, c
                          f"{task.due_date:%d %B}\n"
                          f"{task_priority} приоритет\n", reply_markup=edit_task_kb(task.id))
 
-@router.callback_query(F.data.startswith("delete_task:"))
-async def delete_task(callback: CallbackQuery, user_repo: UserRepo, task_repo: TaskRepo):
+@router.callback_query(F.data.startswith("complete_task:"))
+async def complete_task(callback: CallbackQuery, user_repo: UserRepo, task_repo: TaskRepo, state: FSMContext):
     task_id = int(callback.data.split(":")[1])
     user = await user_repo.get_user_by_tg_id(callback.from_user.id)
-    await task_repo.delete_task(task_id, user.id)
+    await task_repo.complete_task(task_id, user.id)
     await callback.answer()
-    await callback.message.answer("Задача успешно удалена")
-
+    await callback.message.answer("Задача успешно выполнена!")
 
 @router.callback_query(F.data.startswith("edit_task:"))
 async def edit_task(callback: CallbackQuery, user_repo: UserRepo, state: FSMContext):
@@ -74,3 +73,13 @@ async def edit_task(callback: CallbackQuery, user_repo: UserRepo, state: FSMCont
     await callback.message.answer("Что вы хотите изменить?", reply_markup=choice_menu_kb())
     await state.set_state(EditTask.edit_message)
     await callback.answer()
+
+
+@router.callback_query(F.data.startswith("delete_task:"))
+async def delete_task(callback: CallbackQuery, user_repo: UserRepo, task_repo: TaskRepo):
+    task_id = int(callback.data.split(":")[1])
+    user = await user_repo.get_user_by_tg_id(callback.from_user.id)
+    await task_repo.delete_task(task_id, user.id)
+    await callback.answer()
+    await callback.message.answer("Задача успешно удалена!")
+

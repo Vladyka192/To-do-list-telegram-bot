@@ -1,14 +1,11 @@
-import dateparser
 from dateparser.search import search_dates
 
-# def parse_date(text_input: str, languages: list):
-#     settings = {
-#         'USE_GIVEN_LANGUAGE_ORDER': True,
-#         'PREFER_DATES_FROM': 'future', 
-#         'RETURN_AS_TIMEZONE_AWARE': True
-#     }
+def parse_date(text_input: str):
+    settings = {
+        'USE_GIVEN_LANGUAGE_ORDER': True,
+        'PREFER_DATES_FROM': 'future'
+    }
+    date = search_dates(text_input, settings=settings, languages=['ru', 'en'])
+    result = text_input.replace(date[0][0], "")
 
-#     return dateparser.parse(text_input, settings=settings, languages=languages)
-
-date = search_dates("Завтра в 15:00 подготовить отчет", languages=['ru', 'en'])
-print(date)
+    return result, date[0][1]

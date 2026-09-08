@@ -1,4 +1,4 @@
-PRIORITY_KEYWOARDS = {
+PRIORITY_KEYWORDS = {
     "high": [
         "срочно",
         "важно",
@@ -17,5 +17,13 @@ PRIORITY_KEYWOARDS = {
     ],
 }
 
-def priority_parser():
-    
+def parse_priority(text_input: str):
+    text = text_input.lower()
+
+    for priority, keywords in PRIORITY_KEYWORDS.items():
+        for keyword in keywords:
+            if keyword in text:
+                result = text.replace(keyword, "")
+                return result, priority
+
+    return text_input, "medium"

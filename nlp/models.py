@@ -8,7 +8,7 @@ class Priority(str, Enum):
     MEDIUM = "medium"
     HIGH = "high"
 
-class ParsedTast(BaseModel):
+class ParsedTask(BaseModel):
     title: str
     date: date | None=None
     time: time | None=None

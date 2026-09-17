@@ -1,3 +1,4 @@
+import re
 PRIORITY_KEYWORDS = {
     "high": [
         "срочно",
@@ -22,8 +23,16 @@ def parse_priority(text_input: str):
 
     for priority, keywords in PRIORITY_KEYWORDS.items():
         for keyword in keywords:
-            if keyword in text:
-                result = text.replace(keyword, "")
-                return result, priority
+            start = text.find(keyword)
+            if start != -1:
+                end = start + len(keyword)
+
+                prefix = text_input[:start]
+                if prefix.endswith(", "):
+                    start -= 2
+
+                text_input = text_input[:start] + text_input[end:]
+                text_input = re.sub(r"\s+", " ", text_input).strip()
+                return text_input, priority
 
     return text_input, "medium"

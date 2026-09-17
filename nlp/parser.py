@@ -10,8 +10,8 @@ def parse_message(text: str):
     text, priority = parse_priority(text)
     title = text
 
-    print(date.date(), datetime.strptime(time, "%H:%M").time(), priority, title)
+    print(date.date(), time, priority, title)
 
     # return ParsedTask(title=title, date=date, time=time, priority=priority)
 
-parse_message("Завтра купить хлеб в 15:00, СРОЧНО")
+parse_message("Завтра купить хлеб в 15:00, СРОЧНО.")

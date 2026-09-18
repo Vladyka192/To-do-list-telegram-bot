@@ -10,6 +10,21 @@ from repositories.user import UserRepo
 from repositories.task import TaskRepo
 from repositories.reminder import RemindRepo
 
+PRIORITY_KEYWORDS = {
+    "daily": [
+        "каждый день",
+        "ежедневно",
+    ],
+    "weekly": [
+        "каждую неделю",
+        "еженедельно",
+    ],
+    "monthly": [
+        "каждый месяц",
+        "ежемесячно",
+    ],
+}
+
 class CreateRecurrence_rule(StatesGroup):
     recurrence_rule = State()
 
@@ -46,7 +61,7 @@ async def remind_task(message: Message, command: CommandObject, task_repo: TaskR
         return
     
     await state.update_data(task_id=task.id)
-    await message.answer("Сколько раз задача должна повторяться? Например: Каждые 2 недели")
+    await message.answer("Сколько раз задача должна повторяться? Например: Каждый день")
     await state.set_state(CreateRecurrence_rule.recurrence_rule)
 
 @router.message(StateFilter(CreateRecurrence_rule.recurrence_rule))

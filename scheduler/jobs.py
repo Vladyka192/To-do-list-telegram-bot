@@ -24,3 +24,5 @@ async def check_recurrence_rules(bot: Bot, session_factory, task_repo: TaskRepo,
             try:
                 await task_repo.create_task(user.id, task.title, task.descriptin, task.status, task.priority, task.due_date, task.due_time)
                 await remind_repo.create_reminder(task.id, recurrence_rule.start_at)
+            except Exception as error:
+                print(f"Ошибка отправки напоминани")

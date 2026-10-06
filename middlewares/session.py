@@ -6,7 +6,6 @@ from aiogram.types import TelegramObject
 from repositories.user import UserRepo
 from repositories.task import TaskRepo
 from repositories.reminder import RemindRepo
-from repositories.recurrence_rule import RecurrenceRule
 
 class DatabaseSessionMiddleware(BaseMiddleware):
     def __init__(self, session_maker) -> None:
@@ -22,5 +21,4 @@ class DatabaseSessionMiddleware(BaseMiddleware):
             data["user_repo"] = UserRepo(session=session)
             data["task_repo"] = TaskRepo(session=session)
             data["remind_repo"] = RemindRepo(session=session)
-            data["recurrence_rule"] = RecurrenceRule(session=session)
             return await handler(event, data)

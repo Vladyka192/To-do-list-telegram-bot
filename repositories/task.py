@@ -10,7 +10,7 @@ class TaskRepo:
         self.__session = session
 
     async def get_user_tasks(self, user_id: int):
-        statement = select(Task).where(Task.user_id == user_id)
+        statement = select(Task).where(Task.user_id == user_id, Task.status != "completed")
         tasks = await self.__session.scalars(statement)
         return tasks.all()
 

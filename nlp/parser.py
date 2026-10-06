@@ -1,8 +1,7 @@
-from datetime import datetime
-from models import ParsedTask
-from date_parser import parse_date
-from time_parser import parse_time
-from priority_parser import parse_priority
+from nlp.models import ParsedTask
+from nlp.date_parser import parse_date
+from nlp.time_parser import parse_time
+from nlp.priority_parser import parse_priority
 
 def parse_message(text: str):
     text, date = parse_date(text)

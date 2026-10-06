@@ -19,4 +19,3 @@ class Task(BaseModel):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
     user: Mapped["User"] = relationship("User", back_populates="tasks")
     reminders: Mapped[list["Reminder"]] = relationship("Reminder", back_populates="task", cascade="all, delete-orphan")
-    recurrence_rule: Mapped[list["Recurrencerule | None"]] = relationship("Recurrencerule", back_populates="task")

@@ -1,6 +1,5 @@
 from aiogram import Router, F
-from aiogram.filters import Command, CommandObject, StateFilter
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.filters import Command, CommandObject
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
@@ -14,7 +13,7 @@ from handlers.edit import EditTask
 router = Router()
 
 @router.message(Command("task"))
-async def get_task(message: Message, user_repo: UserRepo, task_repo: TaskRepo, command: CommandObject, state: FSMContext):
+async def get_task(message: Message, user_repo: UserRepo, task_repo: TaskRepo, command: CommandObject):
     user = await user_repo.get_user_by_tg_id(message.from_user.id)
     if not user:
         await message.answer("Сначала выполните /start")
@@ -45,20 +44,21 @@ async def get_task(message: Message, user_repo: UserRepo, task_repo: TaskRepo, c
             2: "Средний",
             3: "Высокий"
         }
-    # status_names = {
-    #         "active": "Активная",
-    #         "completed": "Выполненная",
-    #         "cancelled": "Отмененная"
-    #     }
+    status_names = {
+            "active": "Активная",
+            "completed": "Выполненная",
+            "cancelled": "Отмененная"
+        }
     
     task_priority = priority_names[task.priority]
-    # task_status = status_names[task.status]
+    task_status = status_names[task.status]
     await message.answer(f"{task.title}\n"
                          f"{task.due_date:%d %B}\n"
+                         f"Статус: {task_status}\n"
                          f"{task_priority} приоритет\n", reply_markup=edit_task_kb(task.id))
 
 @router.callback_query(F.data.startswith("complete_task:"))
-async def complete_task(callback: CallbackQuery, user_repo: UserRepo, task_repo: TaskRepo, state: FSMContext):
+async def complete_task(callback: CallbackQuery, user_repo: UserRepo, task_repo: TaskRepo):
     task_id = int(callback.data.split(":")[1])
     user = await user_repo.get_user_by_tg_id(callback.from_user.id)
     await task_repo.complete_task(task_id, user.id)

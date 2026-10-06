@@ -5,7 +5,6 @@ from aiogram.types import Message
 from repositories.user import UserRepo
 from repositories.task import TaskRepo
 
-from datetime import datetime
 import locale
 locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
@@ -17,7 +16,7 @@ async def get_tasks(message: Message, user_repo: UserRepo, task_repo: TaskRepo):
     if not user:
         await message.answer("Сначала выполните /start")
         return
-    tasks = await task_repo.get_user_tasks(user.id)
+    tasks = await task_repo.get_user_task_history(user.id)
     if not tasks:
         await message.answer("У вас пока нет истории задач")
         return

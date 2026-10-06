@@ -10,6 +10,6 @@ class Priority(str, Enum):
 
 class ParsedTask(BaseModel):
     title: str
-    date: date | None=None
-    time: time | None=None
+    date: date | None
+    time: time | None
     priority: Priority = Priority.MEDIUM

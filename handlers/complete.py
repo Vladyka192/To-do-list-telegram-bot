@@ -7,7 +7,7 @@ from repositories.task import TaskRepo
 
 router = Router()
 
-@router.meesage(Command("complete"))
+@router.message(Command("complete"))
 async def complete_task(message: Message, task_repo: TaskRepo, user_repo: UserRepo, command: CommandObject):
     user = user_repo.get_user_by_tg_id(message.from_user.id)
     if not user:

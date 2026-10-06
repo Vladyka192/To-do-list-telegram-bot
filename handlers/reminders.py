@@ -9,7 +9,7 @@ from repositories.reminder import RemindRepo
 router = Router()
 
 @router.message(Command("reminders"))
-async def get_reminders(message: Message, user_repo: UserRepo, task_repo: TaskRepo, remind_repo: RemindRepo):
+async def get_reminders(message: Message, user_repo: UserRepo, remind_repo: RemindRepo):
     user = await user_repo.get_user_by_tg_id(message.from_user.id)
     if not user:
         await message.answer("Сначала выполните /start")

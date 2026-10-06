@@ -5,7 +5,6 @@ from aiogram.types import Message
 from repositories.user import UserRepo
 from repositories.task import TaskRepo
 
-from datetime import datetime
 import locale
 locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 

@@ -82,7 +82,7 @@ async def get_task_message(message: Message, state: FSMContext):
         await message.answer("Редактирование отменено", reply_markup=main_menu_kb())
         return
     else:
-        await message.answer("Неизвестный аргумент. Напишите, что именно: Название, Описание, Приоритет, Дату, Время, Состояние.")
+        await message.answer("Неизвестный аргумент. Напишите, что именно: Название, Описание, Приоритет, Дату, Время, Статус")
         return
 
     await state.set_state(EditTask.change_value)
@@ -91,7 +91,12 @@ async def get_task_message(message: Message, state: FSMContext):
 async def edit_task_value(message: Message, state: FSMContext, task_repo: TaskRepo):
     data = await state.get_data()
     field = data["edit_field"]
-    if(field == "title" or field == "description" or field == "status"):    # status убрать
+    if(field == "title" or field == "description"):
+        value = message.text
+    elif(field == "status"):
+        if message.text != "active" and message.text != "completed" and message.text != "cancelled":
+            await message.answer("Введите статус active, completed, cancelled")
+            return
         value = message.text
     elif(field == "priority"):
         try:

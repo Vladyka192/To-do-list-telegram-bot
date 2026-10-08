@@ -3,10 +3,10 @@ from enum import Enum
 
 from pydantic import BaseModel
 
-class Priority(str, Enum):
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
+class Priority(int, Enum):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
 
 class ParsedTask(BaseModel):
     title: str

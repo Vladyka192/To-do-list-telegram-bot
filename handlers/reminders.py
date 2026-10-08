@@ -3,7 +3,6 @@ from aiogram.types import Message
 from aiogram.filters import Command
 
 from repositories.user import UserRepo
-from repositories.task import TaskRepo
 from repositories.reminder import RemindRepo
 
 router = Router()

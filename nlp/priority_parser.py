@@ -1,17 +1,17 @@
 import re
 PRIORITY_KEYWORDS = {
-    "high": [
+    1: [
         "срочно",
         "важно",
         "высокий приоритет",
         "критично",
         "очень важно",
     ],
-    "medium": [
+    2: [
         "обычный приоритет",
         "средний приоритет",
     ],
-    "low": [
+    3: [
         "не срочно",
         "низкий приоритет",
         "можно позже",
@@ -35,4 +35,4 @@ def parse_priority(text_input: str):
                 text_input = re.sub(r"\s+", " ", text_input).strip()
                 return text_input, priority
 
-    return text_input, "medium"
+    return text_input, 2

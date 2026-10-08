@@ -53,7 +53,7 @@ async def get_task(message: Message, user_repo: UserRepo, task_repo: TaskRepo, c
     task_priority = priority_names[task.priority]
     task_status = status_names[task.status]
     await message.answer(f"{task.title}\n"
-                         f"{task.due_date:%d %B}\n"
+                         f"{task.due_date:%d %B} {task.due_time}\n"
                          f"Статус: {task_status}\n"
                          f"{task_priority} приоритет\n", reply_markup=edit_task_kb(task.id))
 

@@ -59,7 +59,7 @@ class TaskRepo:
         tasks = await self.__session.scalars(statement)
         return tasks.all()
 
-    async def search_task(self, user_id: int, query: str):
+    async def search_task(self, user_id: int):
         statement = select(Task).where(Task.user_id == user_id, or_(Task.title.ilike(f"%query%"), Task.description.ilike(f"%query%")).order_by(Task.created_at.desc()))
 
         result = await self.__session.execute(statement)

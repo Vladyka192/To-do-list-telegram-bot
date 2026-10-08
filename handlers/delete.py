@@ -37,4 +37,4 @@ async def delete_task(message: Message, command: CommandObject, user_repo: UserR
         await message.answer("Ошибка: задач меньше, чем в аргументе. Введите правильный id задачи")
         return
     await task_repo.delete_task(task.id, user.id)
-    await message.answer(f"Задача {task.title} удалена!")
+    await message.answer(f"Задача {task.title.lower()} удалена!")

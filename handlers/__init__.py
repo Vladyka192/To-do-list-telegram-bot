@@ -2,7 +2,6 @@ from aiogram import Dispatcher
 
 from handlers.start import router as start_message
 from handlers.help import router as help_message
-from handlers.main_handler import router as check_messages
 from handlers.tasks import router as tasks
 from handlers.task import router as task
 from handlers.today import router as today_tasks
@@ -16,11 +15,11 @@ from handlers.search import router as search_task
 from handlers.create_remind import router as create_reminder
 from handlers.reminders import router as reminders
 from handlers.delete_reminder import router as delete_reminder
+from handlers.main_handler import router as check_messages
 
 def register_routes(dp: Dispatcher):
     dp.include_router(start_message)
     dp.include_router(help_message)
-    dp.include_router(check_messages)
     dp.include_router(tasks)
     dp.include_router(task)
     dp.include_router(today_tasks)
@@ -34,3 +33,4 @@ def register_routes(dp: Dispatcher):
     dp.include_router(create_reminder)
     dp.include_router(reminders)
     dp.include_router(delete_reminder)
+    dp.include_router(check_messages)

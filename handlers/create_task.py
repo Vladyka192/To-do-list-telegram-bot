@@ -21,17 +21,20 @@ class AddTask(StatesGroup):
 
 router = Router()
 
+@router.message(Command("create_task"))
+async def create_by_command(message: Message, state: FSMContext):
+    await create_task(message, state)
 
-@router.message(F.text == "Задачи")
-async def task(message: Message):
-    await message.answer("У вас на сегодня нет задач", reply_markup=types.InlineKeyboardMarkup(
-        inline_keyboard=[
-            [types.InlineKeyboardButton(text="Создать задачу", callback_data="addtask")]
-        ]
-    ))
+@router.message(F.text == "Создать задачу")
+async def create_by_button(message: Message, state: FSMContext):
+    await create_task(message, state)
+
+async def create_task(message: Message, state: FSMContext):
+    await message.answer("Напишите название задачи")
+    await state.set_state(AddTask.choosing_task_name)
 
 @router.callback_query(StateFilter(None), F.data == "addtask")
-async def create_task(callback: types.CallbackQuery, state: FSMContext):
+async def create_task_by_callback(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.answer("Напишите название задачи")
     await state.set_state(AddTask.choosing_task_name)
 

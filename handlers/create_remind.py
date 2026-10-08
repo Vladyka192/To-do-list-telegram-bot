@@ -18,6 +18,9 @@ router = Router()
 @router.message(Command("remind"))
 async def remind_task(message: Message, command: CommandObject, task_repo: TaskRepo, user_repo: UserRepo, state: FSMContext):
     user = await user_repo.get_user_by_tg_id(message.from_user.id)
+    if not user:
+        await message.answer("Сначала выполните /start")
+        return
 
     if command.args is None:
         await message.answer("Ошибка: не переданы аргументы")

@@ -9,12 +9,12 @@ router = Router()
 
 @router.message(Command("complete"))
 async def complete_task(message: Message, task_repo: TaskRepo, user_repo: UserRepo, command: CommandObject):
-    user = user_repo.get_user_by_tg_id(message.from_user.id)
+    user = await user_repo.get_user_by_tg_id(message.from_user.id)
     if not user:
         await message.answer("Сначала выполните команду /start")
         return
 
-    tasks = task_repo.get_user_tasks(user.id)
+    tasks = await task_repo.get_user_tasks(user.id)
     if not tasks:
         await message.answer("У вас пока нет задач")
         return
@@ -36,6 +36,6 @@ async def complete_task(message: Message, task_repo: TaskRepo, user_repo: UserRe
         await message.answer("Ошибка: задач меньше, чем в аргументе. Введите правильный id задачи")
         return
     await task_repo.complete_task(task.id, user.id)
-    await message.answer(f"Задача {task.title} выполнена!")
+    await message.answer(f"Задача {task.title.lower()} выполнена!")
 
 
